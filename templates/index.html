@@ -7,9 +7,16 @@
     <h1>Prime Number Calculator</h1>
     <form method="post">
         <label>Enter a number:</label>
-        <input type="number" name="number" required>
-        <button type="submit">Calculate</button>
+        <input type="number" name="number" required>        <!--type is for data type name for variable names check inside of python flask-->
+        <button type="submit">Calculate</button>            <!-- Calculate here is for text on the button not a variable -->
     </form>
+
+    {% if warning %}
+  <div style="color: red; font-weight: bold;">
+    {{ warning }}
+  </div>
+    {% endif %}
+
 
     <h2>Prime Numbers up to {{ number }}:</h2>
     <p>{{ primes | join(', ') }}</p>
