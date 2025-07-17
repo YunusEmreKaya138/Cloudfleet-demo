@@ -1,0 +1,37 @@
+# flask-deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-cpu-stress
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo-cpu-stress
+  template:
+    metadata:
+      labels:
+        app: demo-cpu-stress
+    spec:
+      containers:
+      - name: demo-cpu-stress-container
+        image: yunemre/demo-try:v1
+        ports:
+        - containerPort: 5000
+
+---
+
+# flask-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-cpu-stress-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: demo-cpu-stress
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 5000
