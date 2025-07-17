@@ -24,12 +24,12 @@ def is_prime(n):
 def index():
     primes = []
     number = "0"
-
+    
     #This line allows Flask to execute the following commands if an input is submitted through the HTML
     if request.method == 'POST':
-        if int(request.form['number']) <= 0:
+        if int(request.form['number']) <= 0 or request.form['number'] == None:
             warning = "Please enter a positive number."
-            
+
             return render_template('index.html', warning=warning)
         
         else:
@@ -42,8 +42,10 @@ def index():
                 "Timestamp": now,
                 "PrimeLimit": number,
                 "PrimeCount": primeCount})
+    
+    recent_logs = collection.find().sort("Timestamp", -1).limit(10)
 
-    return render_template('index.html', primes=primes, number=number)
+    return render_template('index.html', primes=primes, number=number, recent_logs=recent_logs)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

@@ -1,24 +1,261 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Prime Number Calculator</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Prime Number Calculator</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      /* navbar yüksekliği kadar padding */
+      padding-top: 120px;
+    }
+
+    /* Navbar container */
+    nav.navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: white;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      z-index: 1000;
+    }
+
+    /* Logo */
+    nav.navbar .logo img {
+      height: 98px;
+      width: auto;
+      display: block;
+    }
+
+    /* Menü */
+    nav.navbar ul.menu {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      gap: 30px;
+    }
+
+    nav.navbar ul.menu li {
+      display: flex;
+      align-items: center;
+    }
+
+    nav.navbar ul.menu li a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 600;
+      padding: 8px 12px;
+      transition: color 0.2s ease;
+    }
+    nav.navbar ul.menu li a:hover {
+      color: #007BFF;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      max-width: 1000px;
+      margin: 0 auto;
+      gap: 40px;
+      padding: 0 20px 40px;
+      box-sizing: border-box;
+    }
+
+    /* Sol taraf: form container */
+    .form-container {
+      flex: 0 0 40%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    h1 {
+      margin-top: 0;
+      margin-bottom: 20px;
+      color: #333;
+      align-self: center;
+      width: 100%;
+      text-align: center;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      width: 100%;
+    }
+    label {
+      font-weight: bold;
+      color: #555;
+    }
+    input[type="number"] {
+      padding: 8px 12px;
+      font-size: 1rem;
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      outline-offset: 2px;
+      outline-color: #007BFF;
+    }
+    button {
+      background-color: #007BFF;
+      border: none;
+      color: white;
+      padding: 9px 16px;
+      font-size: 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.25s ease;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .warning {
+      color: red;
+      font-weight: bold;
+      margin-top: 10px;
+      text-align: left;
+    }
+
+    /* Sağ taraf: output ve tablo */
+    .output-container {
+      flex: 0 0 60%;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      color: #222;
+    }
+
+    .output-container h2 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      text-align: left;
+    }
+    .output-container p {
+      word-wrap: break-word;
+      background: white;
+      padding: 15px;
+      border-radius: 6px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.05);
+      max-height: 300px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      box-shadow: 0 0 8px rgba(0,0,0,0.05);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    table th, table td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    table th {
+      background-color: #007BFF;
+      color: white;
+      font-weight: 600;
+    }
+    table tr:hover {
+      background-color: #f1f7ff;
+    }
+
+    /* Responsive düzen (küçük ekranlarda dikey yığın) */
+    @media (max-width: 768px) {
+      main {
+        flex-direction: column;
+        padding-top: 20px;
+      }
+      .form-container, .output-container {
+        flex: none;
+        width: 100%;
+      }
+      .output-container p {
+        max-height: 200px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <h1>Prime Number Calculator</h1>
-    <form method="post">
-        <label>Enter a number:</label>
-        <input type="number" name="number" required>        <!--type is for data type name for variable names check inside of python flask-->
-        <button type="submit">Calculate</button>            <!-- Calculate here is for text on the button not a variable -->
-    </form>
 
-    {% if warning %}
-  <div style="color: red; font-weight: bold;">
-    {{ warning }}
-  </div>
-    {% endif %}
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="logo">
+      <a href="https://cloudfleet.ai/" aria-label="Cloudfleet homepage">
+        <img loading="lazy" src="logo.png" alt="Cloudfleet Logo" />
+      </a>
+    </div>
+    <ul class="menu">
+      <li><a href="https://cloudfleet.ai/docs">Documentation</a></li>
+      <li><a href="https://cloudfleet.ai/pricing">Pricing</a></li>
+    </ul>
+  </nav>
 
+  <main>
+    <div class="form-container">
+      <h1>Prime Number Calculator</h1>
+      <form method="post" novalidate>
+        <label for="number">Enter a number:</label>
+        <input type="number" id="number" name="number" min="1" required value="{{ number if number else '' }}" />
+        <button type="submit">Calculate</button>
+      </form>
 
-    <h2>Prime Numbers up to {{ number }}:</h2>
-    <p>{{ primes | join(', ') }}</p>
+      {% if warning %}
+        <div class="warning">{{ warning }}</div>
+      {% endif %}
+    </div>
+
+    <div class="output-container">
+      {% if primes %}
+        <section class="output">
+          <h2>Prime Numbers up to {{ number }}:</h2>
+          <p>{{ primes | join(', ') }}</p>
+        </section>
+      {% endif %}
+
+      <h2>Last 10 Prime Searches</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Limit</th>
+            <th>Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for log in recent_logs %}
+          <tr>
+            <td>{{ log.Timestamp.strftime('%Y-%m-%d %H:%M:%S') if log.Timestamp else '' }}</td>
+            <td>{{ log.PrimeLimit }}</td>
+            <td>{{ log.PrimeCount }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </main>
+
 </body>
 </html>
