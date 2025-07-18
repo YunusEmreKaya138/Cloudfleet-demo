@@ -4,7 +4,7 @@ from datetime import datetime
 
 app = Flask(__name__)
 
-client = MongoClient("127.0.0.1:27017")
+client = MongoClient("127.0.0.1:27017") #this ip work lokaly only
 db = client["demo-db"]
 collection = db["Calculations"]
 
@@ -23,11 +23,11 @@ def is_prime(n):
 @app.route('/', methods=['GET', 'POST'])
 def index():
     primes = []
-    number = "0"
+    number = None
     
     #This line allows Flask to execute the following commands if an input is submitted through the HTML
     if request.method == 'POST':
-        if int(request.form['number']) <= 0 or request.form['number'] == None:
+        if int(request.form['number']) <= 0 or request.form['number'] == None: #find a way prevent null cuz this one not working
             warning = "Please enter a positive number."
 
             return render_template('index.html', warning=warning)
@@ -35,14 +35,15 @@ def index():
         else:
             number = int(request.form['number'])
             primes = [num for num in range(1, number + 1) if is_prime(num)]
-            #his variables will use for data base section of the project
+            #This variables will use for data base section of the project
             primeCount = len(primes)          
             now = datetime.now()
             collection.insert_one({
                 "Timestamp": now,
                 "PrimeLimit": number,
                 "PrimeCount": primeCount})
-    
+            
+    #variable for displaying recent 10 logs
     recent_logs = collection.find().sort("Timestamp", -1).limit(10)
 
     return render_template('index.html', primes=primes, number=number, recent_logs=recent_logs)

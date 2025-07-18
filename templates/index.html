@@ -204,7 +204,7 @@
   <nav class="navbar" role="navigation" aria-label="Main navigation">
     <div class="logo">
       <a href="https://cloudfleet.ai/" aria-label="Cloudfleet homepage">
-        <img loading="lazy" src="logo.png" alt="Cloudfleet Logo" />
+        <img loading="lazy" src="{{ url_for('static', filename='logo.png') }}" alt="Cloudfleet Logo" />
       </a>
     </div>
     <ul class="menu">
@@ -218,7 +218,7 @@
       <h1>Prime Number Calculator</h1>
       <form method="post" novalidate>
         <label for="number">Enter a number:</label>
-        <input type="number" id="number" name="number" min="1" required value="{{ number if number else '' }}" />
+        <input type="number" id="number" name="number" min="1" required value="{{ number if number else '' }}" placeholder="Write a positive number" />
         <button type="submit">Calculate</button>
       </form>
 
