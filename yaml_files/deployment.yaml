@@ -1,0 +1,66 @@
+# flask-deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-cpu-stress
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo-cpu-stress
+  template:
+    metadata:
+      labels:
+        app: demo-cpu-stress
+    spec:
+      containers:
+      - name: demo-cpu-stress-container
+        image: yunemre/prime-cpu-stress:v2
+        ports:
+        - containerPort: 5000
+        resources:
+          requests:
+            cpu: "300m"
+            memory: "128Mi"
+          limits:
+            cpu: "2000m"
+            memory: "256Mi"
+
+
+---
+
+# flask-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-cpu-stress-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: demo-cpu-stress
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 5000
+
+---
+# flask-hpa.yaml
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: demo-cpu-stress-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: demo-cpu-stress   # Name of the deployment to scale
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70

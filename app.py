@@ -4,7 +4,8 @@ from datetime import datetime
 
 app = Flask(__name__)
 
-client = MongoClient("127.0.0.1:27017") #this ip work localy only
+client = MongoClient("mongodb://mongo-service:27017") #this line connects to the MongoDB service
+# Make sure to replace "mongo-service" with the actual service name if different
 db = client["demo-db"]
 collection = db["Calculations"]
 
@@ -70,7 +71,6 @@ def api_primes():
     return jsonify({
         "prime_limit": number,
         "prime_count": primeCount,
-        "primes": primes
     })
 
 
