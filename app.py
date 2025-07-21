@@ -1,10 +1,10 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from pymongo import MongoClient, InsertOne
 from datetime import datetime
 
 app = Flask(__name__)
 
-client = MongoClient("127.0.0.1:27017") #this ip work lokaly only
+client = MongoClient("127.0.0.1:27017") #this ip work localy only
 db = client["demo-db"]
 collection = db["Calculations"]
 
@@ -47,6 +47,32 @@ def index():
     recent_logs = collection.find().sort("Timestamp", -1).limit(10)
 
     return render_template('index.html', primes=primes, number=number, recent_logs=recent_logs)
+
+# API endpoint (JSON)
+@app.route('/api/primes', methods=['GET'])
+def api_primes():
+    try:
+        number = int(request.args.get('number', 0))
+        if number <= 0:
+            return jsonify({"error": "Please provide a positive integer as 'number' parameter."}), 400
+    except (ValueError, TypeError):
+        return jsonify({"error": "Invalid number parameter."}), 400
+
+    primes = [num for num in range(1, number + 1) if is_prime(num)]
+    primeCount = len(primes)
+    now = datetime.now()
+    collection.insert_one({
+        "Timestamp": now,
+        "PrimeLimit": number,
+        "PrimeCount": primeCount
+    })
+
+    return jsonify({
+        "prime_limit": number,
+        "prime_count": primeCount,
+        "primes": primes
+    })
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
