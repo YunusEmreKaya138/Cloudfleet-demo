@@ -1,4 +1,4 @@
-# Horizontal Scalability
+# Horizontal Scalability and Multi Cloud
 
 This repository provides an example for demonstrating horizontal scalability and multi-cloud architecture. It includes:
 
