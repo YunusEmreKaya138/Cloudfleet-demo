@@ -8,6 +8,9 @@ A CPU stress test application to simulate load, helping illustrate how horizonta
 
 Use this project to observe how your system reacts when deployed across multiple nodes or cloud providers and how additional instances can help handle increased demand.
 
+The Dockerfile is included in this repository.
+You can either build and push the image to your own Docker Hub account, or pull it directly from the existing public repository if preferred.
+
 ````bash
 kubectl apply -f ./yaml_files/deployment.yaml
 ````
