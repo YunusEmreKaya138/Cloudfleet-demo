@@ -14,6 +14,12 @@ spec:
       labels:
         app: demo-cpu-stress
     spec:
+#      nodeSelector:
+#       cfke.io/provider: aws
+#       topology.kubernetes.io/zone: us-west-2
+#
+#      You can add these lines to specify node affinity or node selectors if you want to run this on specific nodes in your cluster.
+#     those are example lines for node affinity or selectors.
       containers:
       - name: demo-cpu-stress-container
         image: yunemre/prime-cpu-stress:v2
